@@ -155,7 +155,7 @@ class LIFX:
 
     def set_color(self, selector, **kwargs):
         """Sets the state of the light's color within the selector.
-        Valid arguments: https://api.developer.lifx.com/v1/docs/colors
+        Valid arguments: https://api.developer.lifx.com/docs/set-state
         """
         return self._put(LIFX_URL+selector+'/state', kwargs)
 
