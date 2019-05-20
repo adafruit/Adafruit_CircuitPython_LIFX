@@ -123,8 +123,9 @@ class LIFX:
         """
         if all_lights:
             selector = 'all'
+        path = LIFX_URL+selector+'/toggle'
         data = {'duration':duration}
-        return self._post(LIFX_URL+selector+'/toggle', data)
+        return self._post(path, data)
 
     def move_effect(self, selector, move_direction, period, power_on):
         """Performs a linear move effect on a light, or lights.
@@ -132,32 +133,43 @@ class LIFX:
         :param double period: Time in second per effect cycle.
         :param bool power_on: Turn on a light before performing the move.
         """
+        path = LIFX_URL+selector+'/effects/move'
         data = {'direction':move_direction,
                 'period':period,
                 'power_on':power_on}
-        return self._post(LIFX_URL+selector+'/effects/move', data)
+        return self._post(path, data)
 
     def effects_off(self, selector, power_off=False):
         """Turns off any running effects on the selected device.
         :param dict selector: Selector to control which lights are requested.
         :param bool power_off: If true, the devices will also be turned off.
         """
+        path = LIFX_URL+selector+'/effects/off'
         data = {'power_off', power_off}
-        return self._post(LIFX_URL+selector+'/effects/off', data)
+        return self._post(path, data)
 
     def set_brightness(self, selector, brightness):
         """Sets the state of the lights within the selector.
         :param dict selector: Selector to control which lights are requested.
         :param double brightness: Brightness level of the light, from 0.0 to 1.0.
         """
+        path = LIFX_URL+selector+'/state'
         data = {'brightness':brightness}
-        return self._put(LIFX_URL+selector+'/state', data)
+        return self._put(path, data)
 
-    def set_color(self, selector, **kwargs):
+    def set_color(self, selector, power, color, brightness=1.0):
         """Sets the state of the light's color within the selector.
-        Valid arguments: https://api.developer.lifx.com/docs/set-state
+        :param dict selector: Selector to control which lights are requested.
+        :param str power: Sets the power state of the light (on/off).
+        :param str color: Color to set the light to (https://api.developer.lifx.com/v1/docs/colors).
+        :param double brightness: Brightness level of the light from 0.0 to 1.0.
         """
-        return self._put(LIFX_URL+selector+'/state', kwargs)
+        path = LIFX_URL+selector+'/state'
+        data = {'power':power,
+                'color':color,
+                'brightness':brightness
+               }
+        return self._put(path, data)
 
     def list_lights(self):
         """Enumerates all the lights associated with the LIFX Cloud Account

@@ -49,7 +49,7 @@ lifx.set_brightness(lifx_light, light_brightness)
 colors = ['yellow', 'blue', 'white']
 for color in colors:
     print('Setting light to: ', color)
-    lifx.set_color(lifx_light, power='on', color=color, brightness=light_brightness)
+    lifx.set_color(lifx_light, 'on', color, brightness=light_brightness)
 
 # Turn off the light
 print('Turning off light...')
