@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_lifx.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_lifx
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_lifx/workflows/Build%20CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_lifx
     :alt: Build Status
 
 Control `LIFX devices <https://www.lifx.com>`_ over the internet using CircuitPython.
