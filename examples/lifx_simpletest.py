@@ -25,11 +25,11 @@ wifi = adafruit_esp32spi_wifimanager.ESPSPI_WiFiManager(esp, secrets, status_lig
 
 # Add your LIFX Personal Access token to secrets.py
 # (to obtain a token, visit: https://cloud.lifx.com/settings)
-lifx_token = secrets['lifx_token']
+lifx_token = secrets["lifx_token"]
 
 # Set this to your LIFX light separator label
 # https://api.developer.lifx.com/docs/selectors
-lifx_light = 'label:Lamp'
+lifx_light = "label:Lamp"
 
 # Initialize the LIFX API Client
 lifx = adafruit_lifx.LIFX(wifi, lifx_token)
@@ -38,7 +38,7 @@ lifx = adafruit_lifx.LIFX(wifi, lifx_token)
 lights = lifx.list_lights()
 
 # Turn on the light
-print('Turning on light...')
+print("Turning on light...")
 lifx.toggle_light(lifx_light)
 
 # Set the light's brightness to 50%
@@ -46,11 +46,11 @@ light_brightness = 0.5
 lifx.set_brightness(lifx_light, light_brightness)
 
 # Cycle the light using the colors of the Python logo
-colors = ['yellow', 'blue', 'white']
+colors = ["yellow", "blue", "white"]
 for color in colors:
-    print('Setting light to: ', color)
-    lifx.set_color(lifx_light, power='on', color=color, brightness=light_brightness)
+    print("Setting light to: ", color)
+    lifx.set_color(lifx_light, power="on", color=color, brightness=light_brightness)
 
 # Turn off the light
-print('Turning off light...')
+print("Turning off light...")
 lifx.toggle_light(lifx_light)
