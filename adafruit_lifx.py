@@ -79,8 +79,8 @@ class LIFX:
         try:
             for res in response.json()["results"]:
                 return res["status"]
-        except KeyError as e:
-            raise KeyError(response.json()["error"]) from e
+        except KeyError as err:
+            raise KeyError(response.json()["error"]) from err
 
     # HTTP Requests
     def _post(self, path, data):
