@@ -20,7 +20,7 @@ except ImportError:
     raise
 
 # Set up ESP32-S2 and adafruit_requests session
-wifi.radio.connect(ssid=secrets['ssid'],password=secrets['password'])
+wifi.radio.connect(ssid=secrets["ssid"], password=secrets["password"])
 pool = socketpool.SocketPool(wifi.radio)
 http_session = adafruit_requests.Session(pool, ssl.create_default_context())
 

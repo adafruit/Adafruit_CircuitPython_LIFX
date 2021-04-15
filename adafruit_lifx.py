@@ -21,6 +21,12 @@ Implementation Notes
 * Adafruit ESP32SPI or ESP_ATcontrol library:
     https://github.com/adafruit/Adafruit_CircuitPython_ESP32SPI
     https://github.com/adafruit/Adafruit_CircuitPython_ESP_ATcontrol
+
+or:
+
+* Adafruit_requests library:
+   https://github.com/adafruit/Adafruit_CircuitPython_Requests
+
 """
 
 __version__ = "0.0.0-auto.0"
@@ -38,10 +44,12 @@ class LIFX:
         """
         Creates an instance of the LIFX HTTP API client.
         :param wifi_manager wifi_manager: WiFiManager from ESPSPI_WiFiManager/ESPAT_WiFiManager
+        or session from adafruit_requests.Session
         :param str lifx_token: LIFX API token (https://api.developer.lifx.com/docs/authentication)
         """
         wifi_type = str(type(wifi_manager))
-        if "ESPSPI_WiFiManager" in wifi_type or "ESPAT_WiFiManager" in wifi_type or "Session" in wifi_type:
+        allowed_wifi_types = ("ESPSPI_WiFiManager", "ESPAT_WiFiManager", "Session")
+        if any(x in wifi_type for x in allowed_wifi_types):
             self._wifi = wifi_manager
         else:
             raise TypeError("This library requires a WiFiManager or Session object.")
