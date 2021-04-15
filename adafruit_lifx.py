@@ -41,7 +41,7 @@ class LIFX:
         :param str lifx_token: LIFX API token (https://api.developer.lifx.com/docs/authentication)
         """
         wifi_type = str(type(wifi_manager))
-        if "ESPSPI_WiFiManager" in wifi_type or "ESPAT_WiFiManager" or "Session" in wifi_type:
+        if "ESPSPI_WiFiManager" in wifi_type or "ESPAT_WiFiManager" in wifi_type or "Session" in wifi_type:
             self._wifi = wifi_manager
         else:
             raise TypeError("This library requires a WiFiManager or Session object.")
