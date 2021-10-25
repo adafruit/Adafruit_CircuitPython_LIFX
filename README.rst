@@ -95,6 +95,11 @@ Set the color of a LIFX device to blue and the brightness to 100%:
 
     lifx.set_color(lifx_light, 'on', 'blue', brightness=1.0)
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/lifx/en/latest/>`_.
+
 Contributing
 ============
 
