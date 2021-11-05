@@ -1,14 +1,10 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-import board
-import busio
-from digitalio import DigitalInOut
+import ssl
 import wifi
 import socketpool
-import ssl
 import adafruit_requests
-import neopixel
 
 import adafruit_lifx
 
