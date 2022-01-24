@@ -2,7 +2,7 @@ Introduction
 ============
 
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-lifx/badge/?version=latest
-    :target: https://circuitpython.readthedocs.io/projects/lifx/en/latest/
+    :target: https://docs.circuitpython.org/projects/lifx/en/latest/
     :alt: Documentation Status
 
 .. image:: https://img.shields.io/discord/327254708534116352.svg
@@ -98,7 +98,7 @@ Set the color of a LIFX device to blue and the brightness to 100%:
 Documentation
 =============
 
-API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/lifx/en/latest/>`_.
+API documentation for this library can be found on `Read the Docs <https://docs.circuitpython.org/projects/lifx/en/latest/>`_.
 
 Contributing
 ============
