@@ -34,19 +34,28 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_lifx.git"
 
 LIFX_URL = "https://api.lifx.com/v1/lights/"
 
+try:
+    from typing import Union, Dict, Any
+    from adafruit_esp32spi.adafruit_esp32spi_wifimanager import ESPSPI_WiFiManager
+    from adafruit_espatcontrol.adafruit_espatcontrol_wifimanager import (
+        ESPAT_WiFiManager,
+    )
+    from adafruit_requests import Session, Response
+
+    WifiManagerType = Union[ESPSPI_WiFiManager, ESPAT_WiFiManager, Session]
+except ImportError:
+    pass
+
 
 class LIFX:
-    """
-    HTTP Interface for interacting with the LIFX API
+    """HTTP Interface for interacting with the LIFX API
+
+    :param wifi_manager: WiFiManager from ESPSPI_WiFiManager/ESPAT_WiFiManager
+        or session from adafruit_requests.Session
+    :param str lifx_token: LIFX API token (https://api.developer.lifx.com/docs/authentication)
     """
 
-    def __init__(self, wifi_manager, lifx_token):
-        """
-        Creates an instance of the LIFX HTTP API client.
-        :param wifi_manager wifi_manager: WiFiManager from ESPSPI_WiFiManager/ESPAT_WiFiManager
-        or session from adafruit_requests.Session
-        :param str lifx_token: LIFX API token (https://api.developer.lifx.com/docs/authentication)
-        """
+    def __init__(self, wifi_manager: WifiManagerType, lifx_token: str) -> None:
         wifi_type = str(type(wifi_manager))
         allowed_wifi_types = ("ESPSPI_WiFiManager", "ESPAT_WiFiManager", "Session")
         if any(x in wifi_type for x in allowed_wifi_types):
@@ -59,7 +68,7 @@ class LIFX:
         }
 
     @staticmethod
-    def _parse_resp(response):
+    def _parse_resp(response: Response) -> str:
         """Parses and returns the JSON response returned
         from the LIFX HTTP API.
         """
@@ -74,75 +83,89 @@ class LIFX:
             raise KeyError(response.json()["error"]) from err
 
     # HTTP Requests
-    def _post(self, path, data):
+    def _post(self, path: str, data: Dict[str, Any]) -> str:
         """POST data to the LIFX API.
+
         :param str path: Formatted LIFX API URL
-        :param json data: JSON data to POST to the LIFX API.
+        :param dict data: JSON data to POST to the LIFX API.
         """
         response = self._wifi.post(path, json=data, headers=self._auth_header)
         response = self._parse_resp(response)
         return response
 
-    def _put(self, path, data):
+    def _put(self, path: str, data: Dict[str, Any]) -> str:
         """PUT data to the LIFX API.
+
         :param str path: Formatted LIFX API URL
-        :param json data: JSON data to PUT to the LIFX API.
+        :param dict data: JSON data to PUT to the LIFX API.
         """
         response = self._wifi.put(path, json=data, headers=self._auth_header)
         response = self._parse_resp(response)
         return response
 
-    def _get(self, path, data):
+    def _get(self, path: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """GET data from the LIFX API.
+
         :param str path: Formatted LIFX API URL
-        :param json data: JSON data to GET from the LIFX API.
+        :param dict data: JSON data to GET from the LIFX API.
         """
         response = self._wifi.get(path, json=data, headers=self._auth_header)
         return response.json()
 
-    def toggle_light(self, selector, all_lights=False, duration=0):
+    def toggle_light(
+        self, selector: str, all_lights: bool = False, duration: float = 0
+    ) -> str:
         """Toggles current state of LIFX light(s).
-        :param dict selector: Selector to control which lights are requested.
+
+        :param str selector: Selector to control which lights are requested.
         :param bool all: Toggle all lights at once. Defaults to false.
-        :param double duration: Time (in seconds) to spend performing a toggle. Defaults to 0.
+        :param float duration: Time (in seconds) to spend performing a toggle. Defaults to 0.
         """
         if all_lights:
             selector = "all"
         data = {"duration": duration}
         return self._post(LIFX_URL + selector + "/toggle", data)
 
-    def move_effect(self, selector, move_direction, period, power_on):
+    def move_effect(
+        self, selector: str, move_direction: str, period: float, power_on: bool
+    ) -> str:
         """Performs a linear move effect on a light, or lights.
+
+        :param str selector: Selector to control which lights are requested.
         :param str move_direction: Move direction, forward or backward.
-        :param double period: Time in second per effect cycle.
+        :param float period: Time in second per effect cycle.
         :param bool power_on: Turn on a light before performing the move.
         """
         data = {"direction": move_direction, "period": period, "power_on": power_on}
         return self._post(LIFX_URL + selector + "/effects/move", data)
 
-    def effects_off(self, selector, power_off=False):
+    def effects_off(self, selector: str, power_off: bool = False) -> str:
         """Turns off any running effects on the selected device.
-        :param dict selector: Selector to control which lights are requested.
+
+        :param str selector: Selector to control which lights are requested.
         :param bool power_off: If true, the devices will also be turned off.
         """
         data = {"power_off", power_off}
         return self._post(LIFX_URL + selector + "/effects/off", data)
 
-    def set_brightness(self, selector, brightness):
+    def set_brightness(self, selector: str, brightness: float) -> str:
         """Sets the state of the lights within the selector.
-        :param dict selector: Selector to control which lights are requested.
-        :param double brightness: Brightness level of the light, from 0.0 to 1.0.
+
+        :param str selector: Selector to control which lights are requested.
+        :param float brightness: Brightness level of the light, from 0.0 to 1.0.
         """
         data = {"brightness": brightness}
         return self._put(LIFX_URL + selector + "/state", data)
 
-    def set_color(self, selector, **kwargs):
+    def set_color(self, selector: str, **kwargs) -> str:
         """Sets the state of the light's color within the selector.
-        Valid arguments: https://api.developer.lifx.com/docs/set-state
+        Valid keyword arguments: https://api.developer.lifx.com/docs/set-state
+
+        :param str selector: Selector to control which lights are requested.
         """
         return self._put(LIFX_URL + selector + "/state", kwargs)
 
-    def list_lights(self):
+    def list_lights(self) -> Dict[str, Any]:
         """Enumerates all the lights associated with the LIFX Cloud Account"""
         response = self._wifi.get(url=LIFX_URL + "all", headers=self._auth_header)
         resp = response.json()
