@@ -35,9 +35,8 @@ setup(
     author_email="circuitpython@adafruit.com",
     install_requires=[
         "Adafruit-Blinka",
-        "Adafruit_CircuitPython_ESP32SPI",
         "adafruit-circuitpython-esp-atcontrol",
-        "adafruit_circuitpython_requests",
+        "adafruit-circuitpython-requests",
     ],
     # Choose your license
     license="MIT",
