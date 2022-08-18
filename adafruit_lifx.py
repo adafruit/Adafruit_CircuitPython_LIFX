@@ -35,14 +35,9 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_lifx.git"
 LIFX_URL = "https://api.lifx.com/v1/lights/"
 
 try:
-    from typing import Union, Dict, Any
-    from adafruit_esp32spi.adafruit_esp32spi_wifimanager import ESPSPI_WiFiManager
-    from adafruit_espatcontrol.adafruit_espatcontrol_wifimanager import (
-        ESPAT_WiFiManager,
-    )
-    from adafruit_requests import Session, Response
-
-    WifiManagerType = Union[ESPSPI_WiFiManager, ESPAT_WiFiManager, Session]
+    from typing import Dict, Any
+    from circuitpython_typing.http import HTTPProtocol
+    from adafruit_requests import Response
 except ImportError:
     pass
 
@@ -55,7 +50,7 @@ class LIFX:
     :param str lifx_token: LIFX API token (https://api.developer.lifx.com/docs/authentication)
     """
 
-    def __init__(self, wifi_manager: WifiManagerType, lifx_token: str) -> None:
+    def __init__(self, wifi_manager: HTTPProtocol, lifx_token: str) -> None:
         wifi_type = str(type(wifi_manager))
         allowed_wifi_types = ("ESPSPI_WiFiManager", "ESPAT_WiFiManager", "Session")
         if any(x in wifi_type for x in allowed_wifi_types):
