@@ -68,7 +68,7 @@ class LIFX:
         from the LIFX HTTP API.
         """
         if response.status_code == 422:
-            raise Exception(
+            raise RuntimeError(
                 "Error: light(s) could not be toggled: " + response["error"]
             )
         try:
