@@ -45,18 +45,17 @@ except ImportError:
 class LIFX:
     """HTTP Interface for interacting with the LIFX API
 
-    :param wifi_manager: WiFiManager from ESPSPI_WiFiManager/ESPAT_WiFiManager
-        or session from adafruit_requests.Session
+    :param wifi_manager wifi_manager: WiFiManager or Session
     :param str lifx_token: LIFX API token (https://api.developer.lifx.com/docs/authentication)
     """
 
     def __init__(self, wifi_manager: HTTPProtocol, lifx_token: str) -> None:
-        wifi_type = str(type(wifi_manager))
-        allowed_wifi_types = ("ESPSPI_WiFiManager", "ESPAT_WiFiManager", "Session")
-        if any(x in wifi_type for x in allowed_wifi_types):
-            self._wifi = wifi_manager
-        else:
-            raise TypeError("This library requires a WiFiManager or Session object.")
+        for attr in ("get", "post", "put"):
+            if not hasattr(wifi_manager, attr):
+                error = "This library requires a WiFiManager or Session object with a "
+                error += f"`{attr}` method, not {type(wifi_manager)}"
+                raise TypeError(error)
+        self._wifi = wifi_manager
         self._lifx_token = lifx_token
         self._auth_header = {
             "Authorization": "Bearer %s" % self._lifx_token,
