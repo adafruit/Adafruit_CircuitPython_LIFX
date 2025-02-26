@@ -11,9 +11,11 @@ import neopixel
 
 import adafruit_lifx
 
-# Get WiFi details, ensure these are setup in settings.toml
+# Get WiFi details and LIFX keys, ensure these are setup in settings.toml
+# (to obtain a token, visit: https://cloud.lifx.com/settings)
 ssid = getenv("CIRCUITPY_WIFI_SSID")
 password = getenv("CIRCUITPY_WIFI_PASSWORD")
+lifx_token = getenv("lifx_token")
 
 # ESP32 SPI
 esp32_cs = DigitalInOut(board.ESP_CS)
@@ -23,10 +25,6 @@ spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
 esp = adafruit_esp32spi.ESP_SPIcontrol(spi, esp32_cs, esp32_ready, esp32_reset)
 status_pixel = neopixel.NeoPixel(board.NEOPIXEL, 1, brightness=0.2)
 wifi = WiFiManager(esp, ssid, password, status_pixel=status_pixel)
-
-# Add your LIFX Personal Access token to secrets.py
-# (to obtain a token, visit: https://cloud.lifx.com/settings)
-lifx_token = getenv("lifx_token")
 
 if lifx_token is None:
     raise KeyError("Please add your lifx token to settings.toml")

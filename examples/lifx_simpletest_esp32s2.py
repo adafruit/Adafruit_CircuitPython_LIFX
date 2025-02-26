@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
+from os import getenv
 import ssl
 import wifi
 import socketpool
@@ -8,21 +9,16 @@ import adafruit_requests
 
 import adafruit_lifx
 
-# Get wifi details and more from a secrets.py file
-try:
-    from secrets import secrets
-except ImportError:
-    print("WiFi and API secrets are kept in secrets.py, please add them there!")
-    raise
+# Get WiFi details and LIFX keys, ensure these are setup in settings.toml
+# (to obtain a token, visit: https://cloud.lifx.com/settings)
+ssid = getenv("CIRCUITPY_WIFI_SSID")
+password = getenv("CIRCUITPY_WIFI_PASSWORD")
+lifx_token = getenv("lifx_token")
 
 # Set up ESP32-S2 and adafruit_requests session
-wifi.radio.connect(ssid=secrets["ssid"], password=secrets["password"])
+wifi.radio.connect(ssid=ssid, password=password)
 pool = socketpool.SocketPool(wifi.radio)
 http_session = adafruit_requests.Session(pool, ssl.create_default_context())
-
-# Add your LIFX Personal Access token to secrets.py
-# (to obtain a token, visit: https://cloud.lifx.com/settings)
-lifx_token = secrets["lifx_token"]
 
 # Set this to your LIFX light separator label
 # https://api.developer.lifx.com/docs/selectors
