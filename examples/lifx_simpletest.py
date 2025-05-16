@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 from os import getenv
+
 import board
 import busio
-from digitalio import DigitalInOut
+import neopixel
 from adafruit_esp32spi import adafruit_esp32spi
 from adafruit_esp32spi.adafruit_esp32spi_wifimanager import WiFiManager
-import neopixel
+from digitalio import DigitalInOut
 
 import adafruit_lifx
 
