@@ -35,9 +35,10 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_lifx.git"
 LIFX_URL = "https://api.lifx.com/v1/lights/"
 
 try:
-    from typing import Dict, Any
-    from circuitpython_typing.http import HTTPProtocol
+    from typing import Any, Dict
+
     from adafruit_requests import Response
+    from circuitpython_typing.http import HTTPProtocol
 except ImportError:
     pass
 
@@ -67,9 +68,7 @@ class LIFX:
         from the LIFX HTTP API.
         """
         if response.status_code == 422:
-            raise RuntimeError(
-                "Error: light(s) could not be toggled: " + response["error"]
-            )
+            raise RuntimeError("Error: light(s) could not be toggled: " + response["error"])
         try:
             for res in response.json()["results"]:
                 return res["status"]
@@ -106,9 +105,7 @@ class LIFX:
         response = self._wifi.get(path, json=data, headers=self._auth_header)
         return response.json()
 
-    def toggle_light(
-        self, selector: str, all_lights: bool = False, duration: float = 0
-    ) -> str:
+    def toggle_light(self, selector: str, all_lights: bool = False, duration: float = 0) -> str:
         """Toggles current state of LIFX light(s).
 
         :param str selector: Selector to control which lights are requested.
@@ -120,9 +117,7 @@ class LIFX:
         data = {"duration": duration}
         return self._post(LIFX_URL + selector + "/toggle", data)
 
-    def move_effect(
-        self, selector: str, move_direction: str, period: float, power_on: bool
-    ) -> str:
+    def move_effect(self, selector: str, move_direction: str, period: float, power_on: bool) -> str:
         """Performs a linear move effect on a light, or lights.
 
         :param str selector: Selector to control which lights are requested.
