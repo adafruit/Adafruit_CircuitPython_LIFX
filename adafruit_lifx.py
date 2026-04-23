@@ -59,7 +59,7 @@ class LIFX:
         self._wifi = wifi_manager
         self._lifx_token = lifx_token
         self._auth_header = {
-            "Authorization": "Bearer %s" % self._lifx_token,
+            "Authorization": f"Bearer {self._lifx_token}",
         }
 
     @staticmethod
